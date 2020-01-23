@@ -16,6 +16,11 @@ class Meal implements TranslatableInterface
 {
     use TranslatableTrait;
 
+    public function __construct()
+    {
+        $this->status = true;
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
