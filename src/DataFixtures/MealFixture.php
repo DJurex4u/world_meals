@@ -25,7 +25,7 @@ class MealFixture extends Fixture
             $meal->translate('hr')->setDescription('Opis jela br.' . $j .' na HRV jeziku');
             $meal->translate('de')->setTitle('Name des gerichts nummer '. $j .' auf Deutsch');
             $meal->translate('de')->setDescription( 'Beschreibung nummer'. $j .' auf Deutsch');
-            $meal->translate('en')->setTitle('Title of a meal no.'. $j .'in English');
+            $meal->translate('en')->setTitle('Title of a meal no.'. $j .' in English');
             $meal->translate('en')->setDescription('Description of a meal no.'. $j .' in English');
 
             $manager->persist($meal);

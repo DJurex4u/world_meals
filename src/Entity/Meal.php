@@ -43,6 +43,18 @@ class Meal implements TranslatableInterface
         return $this->status;
     }
 
+    public function getStatusToString(): string
+    {
+        if($this->getStatus())
+        {
+            return 'Created';
+        }else
+        {
+            return 'Deleted';
+        }
+
+    }
+
     public function setStatus(bool $status): self
     {
         $this->status = $status;
@@ -55,6 +67,18 @@ class Meal implements TranslatableInterface
         $this->status = !$this->status;
 
         return $this;
+    }
+
+    public function toArray(string $locale){
+        return array(
+            'id' => $this->getId(),
+            'title' => $this->translate($locale)->getTitle(),
+            'description' => $this->translate($locale)->getDescription(),
+            'status' => $this->getStatusToString(),
+            'category' => 'not implemented',
+            'tags' => 'not implemented',
+            'ingredients' => ''
+        );
     }
 
 }
