@@ -30,23 +30,57 @@ class MealController extends AbstractController implements TranslatableInterface
      */
     public function showMealAction(Request $request): JsonResponse
     {
+        //TODO: Validation; research bundles
+
         $locale = $request->get('lang');
-        $id = $request->get('id');
-        $meals = $this->mealRepository->findBy(['id' => 2]);
-//        var_dump($meal); die();
-//        $meal = $this->mealRepository->findOneBy(['id' => 2]);
-//        $data = $meal->toArray($locale);
+        $itemsPerPage = $request->get('per_page');
+
+        $meals = $this->mealRepository->findBy([]);
+        $totalItems = count($meals);
+        $totalPages = $this->numOfPages($totalItems, $itemsPerPage);
+        $currentPage = $request->get('page');
+
+        $allData = new ArrayCollection();
+        $meta = array("meta" => array('itemsPerPage' => $itemsPerPage, 'totalItems' => $totalItems, 'totalPages' => $totalPages));
+        $allData->add($meta);
+
+
+        if($itemsPerPage){
+            $magic = $currentPage * $itemsPerPage - $itemsPerPage;
+            $mealsToBePresented = array_slice($meals, $magic,$itemsPerPage, true);
+        }else{
+            $mealsToBePresented = $meals;
+        }
         $data = new ArrayCollection();
-        foreach ($meals as $meal )
+        foreach ($mealsToBePresented as $meal )
         {
             $newElement = $meal->toArray($locale);
             $data->add($newElement);
         }
 
-        $response = new JsonResponse($data->toArray(), Response::HTTP_OK);
+        $allData->add(array("data" => $data->toArray()));
+
+        $previousLink = $request->getPathInfo();
+        $nextLink = '';
+        $self= '';
+        $p = $request->getQueryString();
+//        die($previousLink. '?' .$p);
+        $links = array('links'=> array('prev_link' => $previousLink, 'next_link'=>$nextLink, 'self'=>$self));
+        $allData->add($links);
+
+
+        $response = new JsonResponse($allData->toArray(), Response::HTTP_OK);
         $response->setEncodingOptions($response->getEncodingOptions()|JSON_PRETTY_PRINT);
         return $response;
     }
+
+    //TODO: this does not belong here, refactor ASAP!!!
+    public function  numOfPages(int $totalItems, int $itemsPerPage){
+        $div = intdiv($totalItems, $itemsPerPage);
+        $num = $totalItems % $itemsPerPage ? ++$div : $div;
+        return $num;
+    }
+
 
 //    /**
 //     * @Route("/hello", name="proba")
