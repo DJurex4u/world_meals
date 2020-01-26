@@ -60,11 +60,15 @@ class MealController extends AbstractController implements TranslatableInterface
 
         $allData->add(array("data" => $data->toArray()));
 
-        $previousLink = $request->getPathInfo();
-        $nextLink = '';
-        $self= '';
-        $p = $request->getQueryString();
-//        die($previousLink. '?' .$p);
+        //TODO: Encodes "&" in URLs as "\u0026" when encoding to json, also puts "\" as first character
+        $basePath = $request->getPathInfo();
+        $query = 'lang='.$locale.'&per_page='.$itemsPerPage.'&';
+        $previousPage = $currentPage>0 ? $currentPage-1 : null;
+        $nextPage = $currentPage<$totalPages ? $currentPage+1 : null;
+        $previousLink =$basePath. '?' .$query.''.$previousPage;
+        $nextLink =$basePath. '?' .$query.''.$nextPage;
+        $self =$basePath.'?'.$request->getQueryString();
+
         $links = array('links'=> array('prev_link' => $previousLink, 'next_link'=>$nextLink, 'self'=>$self));
         $allData->add($links);
 
@@ -74,7 +78,7 @@ class MealController extends AbstractController implements TranslatableInterface
         return $response;
     }
 
-    //TODO: this does not belong here, refactor ASAP!!!
+    //TODO: this does not belong here
     public function  numOfPages(int $totalItems, int $itemsPerPage){
         $div = intdiv($totalItems, $itemsPerPage);
         $num = $totalItems % $itemsPerPage ? ++$div : $div;
