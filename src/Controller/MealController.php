@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Repository\MealRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,10 +31,19 @@ class MealController extends AbstractController implements TranslatableInterface
     public function showMealAction(Request $request): JsonResponse
     {
         $locale = $request->get('lang');
-        $meal = $this->mealRepository->findOneBy(['id' => 2]);
-        $data = $meal->toArray($locale);
+        $id = $request->get('id');
+        $meals = $this->mealRepository->findBy(['id' => 2]);
+//        var_dump($meal); die();
+//        $meal = $this->mealRepository->findOneBy(['id' => 2]);
+//        $data = $meal->toArray($locale);
+        $data = new ArrayCollection();
+        foreach ($meals as $meal )
+        {
+            $newElement = $meal->toArray($locale);
+            $data->add($newElement);
+        }
 
-        $response = new JsonResponse($data, Response::HTTP_OK);
+        $response = new JsonResponse($data->toArray(), Response::HTTP_OK);
         $response->setEncodingOptions($response->getEncodingOptions()|JSON_PRETTY_PRINT);
         return $response;
     }
