@@ -7,11 +7,12 @@ namespace App\DataFixtures;
 use App\Entity\Ingredient;
 use App\Entity\Meal;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-const NUMBER_OF_INGREDIENTS = 50;
+const NUMBER_OF_INGREDIENTS = 25;
 
-class IngredientsFixture extends Fixture
+class IngredientsFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -22,8 +23,10 @@ class IngredientsFixture extends Fixture
             $ingredient->translate('de')->setTitle('Zutat '.$j.' auf Deutsch');
             $ingredient->translate('en')->setTitle('Ingredient no. '.$j.' in ENG');
             $ingredient->setSlug('ingridient'.$j);  //there are bundles, but not for symfony 5 :(
-            $name = 'ingredient'.$j;
-            $this->addReference($name, $ingredient);
+
+            $randInt = mt_rand(1, NUMBER_OF_MEALS - 1);
+            $meal = $this->getReference('meal'.$randInt);
+            $ingredient->setMeal($meal);
 
             $manager->persist($ingredient);
             $ingredient->mergeNewTranslations();
@@ -34,7 +37,7 @@ class IngredientsFixture extends Fixture
 
     public function getDependencies(){
         return array(
-            Meal::class
+            MealFixture::class
         );
     }
 
