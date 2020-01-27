@@ -23,7 +23,7 @@ class Category implements TranslatableInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $slug;
 
@@ -84,4 +84,14 @@ class Category implements TranslatableInterface
 
         return $this;
     }
+
+    public function toArray(string $locale){
+
+        return array(
+            'id' => $this->id,
+            'title' => $this->translate($locale)->getTitle(),
+            'slug' => $this->slug
+        );
+    }
+
 }

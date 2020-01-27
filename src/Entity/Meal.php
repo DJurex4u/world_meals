@@ -73,11 +73,11 @@ class Meal implements TranslatableInterface
 
     public function toArray(string $locale){
         return array(
-            'id' => $this->getId(),
+            'id' => $this->id,
             'title' => $this->translate($locale)->getTitle(),
             'description' => $this->translate($locale)->getDescription(),
             'status' => $this->getStatusToString(),
-            'category' => 'not implemented',
+            'category' => $this->getCategory()->toArray($locale),
             'tags' => 'not implemented',
             'ingredients' => ''
         );
