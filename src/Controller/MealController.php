@@ -31,7 +31,6 @@ class MealController extends AbstractController implements TranslatableInterface
     public function showMealAction(Request $request): JsonResponse
     {
         //TODO: Validation; research bundles
-
         $locale = $request->get('lang');
         $itemsPerPage = $request->get('per_page');
 
