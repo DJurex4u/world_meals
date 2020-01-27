@@ -48,14 +48,14 @@ class Ingredient implements TranslatableInterface
         return $this;
     }
 
-    public function getMeals(): ?Meal
+    public function getMeal(): ?Meal
     {
         return $this->meal;
     }
 
-    public function setMeals(?Meal $meal): self
+    public function setMeal(?Meal $meal): self
     {
-        $this->meals = $meal;
+        $this->meal = $meal;
 
         return $this;
     }

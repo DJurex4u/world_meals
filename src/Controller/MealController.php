@@ -64,8 +64,8 @@ class MealController extends AbstractController implements TranslatableInterface
         $query = 'lang='.$locale.'&per_page='.$itemsPerPage.'&';
         $previousPage = $currentPage>0 ? $currentPage-1 : null;
         $nextPage = $currentPage<$totalPages ? $currentPage+1 : null;
-        $previousLink =$basePath. '?' .$query.''.$previousPage;
-        $nextLink =$basePath. '?' .$query.''.$nextPage;
+        $previousLink =$basePath. '?' .$query.'page='.$previousPage;
+        $nextLink =$basePath. '?' .$query.'page='.$nextPage;
         $self =$basePath.'?'.$request->getQueryString();
 
         $links = array('links'=> array('prev_link' => $previousLink, 'next_link'=>$nextLink, 'self'=>$self));
@@ -83,14 +83,4 @@ class MealController extends AbstractController implements TranslatableInterface
         $num = $totalItems % $itemsPerPage ? ++$div : $div;
         return $num;
     }
-
-
-//    /**
-//     * @Route("/hello", name="proba")
-//     */
-//    public function proba(Request $request)
-//    {
-//        $data = $request->get('i');
-//        //return new Response('<html><body>HELLO {{$i}}</body></html>');
-//    }
 }

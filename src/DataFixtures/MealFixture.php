@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Meal;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -13,16 +14,15 @@ use Doctrine\Common\Persistence\ObjectManager;
  * Class MealFixture
  * @package App\DataFixtures
  */
-const NUMBER_OF_OBJECTS = 20;
+const NUMBER_OF_MEALS = 20;
 
 class MealFixture extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < NUMBER_OF_OBJECTS; $i++) {
+        for ($i = 0; $i < NUMBER_OF_MEALS; $i++) {
             $j = $i + 1;
             $meal = new Meal();
-//            $meal->translate('dd')->setTranslatable('');
             $meal->translate('hr')->setTitle('Naziv jela br.' . $j . ' na HRV jeziku');
             $meal->translate('hr')->setDescription('Opis jela br.' . $j .' na HRV jeziku');
             $meal->translate('de')->setTitle('Name des gerichts nummer '. $j .' auf Deutsch');
@@ -33,23 +33,10 @@ class MealFixture extends Fixture
             $name = 'meal'.$j;
             $this->addReference($name, $meal);
 
-//            $randInt = mt_rand(1, NUMBER_OF_CATEGORIES - 1);
-//            $category = $this->getReference('category'.$randInt);
-//            $meal->setCategory($category);
-
-//            //how many engredients in this meal
-//            for($k = 0; $k < mt_rand(1,6); $k++)
-//            {
-//                $randInt = mt_rand(1, NUMBER_OF_INGREDIENTS - 1);
-//                $ingredient = $this->getReference('ingredient'.$randInt);
-//                $meal->addIngredient($ingredient);
-//            }
-
             $manager->persist($meal);
             $meal->mergeNewTranslations();
         }
 
         $manager->flush();
     }
-
 }

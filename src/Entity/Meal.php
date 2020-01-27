@@ -19,7 +19,6 @@ class Meal implements TranslatableInterface
     {
         $this->status = true;
         $this->ingredients = new ArrayCollection();
-        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -35,9 +34,9 @@ class Meal implements TranslatableInterface
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="meal")
+     * @ORM\OneToOne(targetEntity="App\Entity\Category", mappedBy="meal")
      */
-    private $categories;
+    private $category;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ingredient", mappedBy="meal")
@@ -80,45 +79,33 @@ class Meal implements TranslatableInterface
         return $this;
     }
 
-    public function toArray(string $locale){
+    public function toArray(string $locale)
+    {
+        $category = $this->getCategory();
+        if(!$category){
+            $categoryArr = null;
+        }else{
+            $categoryArr = $category->toArray($locale);
+        }
+
         return array(
             'id' => $this->id,
             'title' => $this->translate($locale)->getTitle(),
             'description' => $this->translate($locale)->getDescription(),
             'status' => $this->getStatusToString(),
-            'category' => $this->getCategory()->toArray($locale),
+            'category' => $categoryArr,
             'tags' => 'not implemented',
             'ingredients' => ''
         );
     }
-
-    /**
-     * @return Collection|Category[]
-     */
-    public function getCategories(): ?Category
+    public function getCategory(): ?Category
     {
-        return $this->categories;
+        return $this->category;
     }
 
-     function addCategory(Category $category)
+    public function setCategory(?Category $category)
     {
-        if (!$this->categories->contains($category)){
-            $this->categories[] = $category;
-            $category->setMeal($this);
-        }
-        return $this;
-    }
-
-
-    public function removeCategory(Category $category)
-    {
-        if ($this->categories->contains($category)){
-            $this->categories->remove($category);
-            // set the owning side to null (unless already changed)
-            if($category->getMeal() === $this){
-                $category->setMeal(null);
-            }
-        }
+        $this->category = $category;
     }
 
     /**
@@ -133,7 +120,7 @@ class Meal implements TranslatableInterface
     {
         if (!$this->ingredients->contains($ingredient)) {
             $this->ingredients[] = $ingredient;
-            $ingredient->setMeals($this);
+            $ingredient->setMeal($this);
         }
 
         return $this;
@@ -144,8 +131,8 @@ class Meal implements TranslatableInterface
         if ($this->ingredients->contains($ingredient)) {
             $this->ingredients->removeElement($ingredient);
             // set the owning side to null (unless already changed)
-            if ($ingredient->getMeals() === $this) {
-                $ingredient->setMeals(null);
+            if ($ingredient->getMeal() === $this) {
+                $ingredient->setMeal(null);
             }
         }
 

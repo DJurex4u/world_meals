@@ -28,7 +28,7 @@ class Category implements TranslatableInterface
     private $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="categories")
+     * @ORM\OneToOne(targetEntity="App\Entity\Meal", inversedBy="category")
      */
     private $meal;
 
@@ -62,13 +62,12 @@ class Category implements TranslatableInterface
     }
 
 
-//    public function toArray(string $locale){
-//
-//        return array(
-//            'id' => $this->id,
-//            'title' => $this->translate($locale)->getTitle(),
-//            'slug' => $this->slug
-//        );
-//    }
+    public function toArray(string $locale){
+        return array(
+            'id' => $this->id,
+            'title' => $this->translate($locale)->getTitle(),
+            'slug' => $this->slug
+        );
+    }
 
 }

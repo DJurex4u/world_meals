@@ -7,11 +7,12 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Meal;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 const NUMBER_OF_CATEGORIES = 5;
 
-class CategoryFixture extends Fixture
+class CategoryFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -22,8 +23,15 @@ class CategoryFixture extends Fixture
             $category->translate('de')->setTitle('Kategorie '.$j.' auf Deutsch');
             $category->translate('en')->setTitle('Category no. '.$j.' in ENG');
             $category->setSlug('category'.$j);  //there are bundles, but not for symfony 5 :(
-            $name = 'category'.$j;
-            $this->addReference($name, $category);
+
+            // every meal has 0 or 1 random category
+            $randInt = mt_rand(1, NUMBER_OF_MEALS - 1);
+            $meal = $this->getReference('meal'.$randInt);
+            if (!$meal->getCategory()){
+                $category->setMeal($meal);
+            }
+
+
 
             $manager->persist($category);
             $category->mergeNewTranslations();
@@ -34,7 +42,7 @@ class CategoryFixture extends Fixture
 
     public function getDependencies(){
         return array(
-            Meal::class
+            MealFixture::class
         );
     }
 }
