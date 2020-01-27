@@ -2,16 +2,14 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
  */
-class Category implements TranslatableInterface
+class Ingredient implements TranslatableInterface
 {
     use TranslatableTrait;
 
@@ -28,7 +26,8 @@ class Category implements TranslatableInterface
     private $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="categories")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="ingredients")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $meal;
 
@@ -49,26 +48,24 @@ class Category implements TranslatableInterface
         return $this;
     }
 
-    public function getMeal()
+    public function getMeals(): ?Meal
     {
-     return $this->meal;
+        return $this->meal;
     }
 
-    public function setMeal(?Meal $meal): self
+    public function setMeals(?Meal $meal): self
     {
-        $this->meal = $meal;
+        $this->meals = $meal;
 
         return $this;
     }
 
-
-//    public function toArray(string $locale){
-//
-//        return array(
-//            'id' => $this->id,
-//            'title' => $this->translate($locale)->getTitle(),
-//            'slug' => $this->slug
-//        );
-//    }
-
+    public function toArray(string $locale)
+    {
+        return array(
+            'id' => $this->id,
+            'title' => $this->translate($locale)->getTitle(),
+            'slug' => $this->slug
+        );
+    }
 }

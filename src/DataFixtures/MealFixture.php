@@ -30,21 +30,26 @@ class MealFixture extends Fixture
             $meal->translate('en')->setTitle('Title of a meal no.'. $j .' in English');
             $meal->translate('en')->setDescription('Description of a meal no.'. $j .' in English');
 
-            $randInt = mt_rand(1, NUMBER_OF_CATEGORIES - 1);
-            $category = $this->getReference('category'.$randInt);
-            $meal->setCategory($category);
+            $name = 'meal'.$j;
+            $this->addReference($name, $meal);
+
+//            $randInt = mt_rand(1, NUMBER_OF_CATEGORIES - 1);
+//            $category = $this->getReference('category'.$randInt);
+//            $meal->setCategory($category);
+
+//            //how many engredients in this meal
+//            for($k = 0; $k < mt_rand(1,6); $k++)
+//            {
+//                $randInt = mt_rand(1, NUMBER_OF_INGREDIENTS - 1);
+//                $ingredient = $this->getReference('ingredient'.$randInt);
+//                $meal->addIngredient($ingredient);
+//            }
 
             $manager->persist($meal);
             $meal->mergeNewTranslations();
         }
 
         $manager->flush();
-    }
-
-    public function getDependencies(){
-        return array(
-            CategoryFixture::class
-        );
     }
 
 }

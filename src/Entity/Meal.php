@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
@@ -16,6 +18,8 @@ class Meal implements TranslatableInterface
     public function __construct()
     {
         $this->status = true;
+        $this->ingredients = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -31,9 +35,14 @@ class Meal implements TranslatableInterface
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="meals")
+     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="meal")
      */
-    private $category;
+    private $categories;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ingredient", mappedBy="meal")
+     */
+    private $ingredients;
 
     public function getId(): ?int
     {
@@ -83,14 +92,62 @@ class Meal implements TranslatableInterface
         );
     }
 
-    public function getCategory(): ?Category
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): ?Category
     {
-        return $this->category;
+        return $this->categories;
     }
 
-    public function setCategory(?Category $category): self
+     function addCategory(Category $category)
     {
-        $this->category = $category;
+        if (!$this->categories->contains($category)){
+            $this->categories[] = $category;
+            $category->setMeal($this);
+        }
+        return $this;
+    }
+
+
+    public function removeCategory(Category $category)
+    {
+        if ($this->categories->contains($category)){
+            $this->categories->remove($category);
+            // set the owning side to null (unless already changed)
+            if($category->getMeal() === $this){
+                $category->setMeal(null);
+            }
+        }
+    }
+
+    /**
+     * @return Collection|Ingredient[]
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+            $ingredient->setMeals($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): self
+    {
+        if ($this->ingredients->contains($ingredient)) {
+            $this->ingredients->removeElement($ingredient);
+            // set the owning side to null (unless already changed)
+            if ($ingredient->getMeals() === $this) {
+                $ingredient->setMeals(null);
+            }
+        }
 
         return $this;
     }
