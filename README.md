@@ -5,7 +5,9 @@
 Aplikacija:
 
 endpoint je ruta:   /
+
 primjer routea s queryjem: http://localhost/?lang=en&per_page=3&page=2
+
 VAŽNO: implementacija zahtjeva zadavanje tri parametra kao u primjeru iznad (jezik, rezultate po stranici i broj stranice)
 
 
