@@ -95,7 +95,7 @@ class Meal implements TranslatableInterface
             'status' => $this->getStatusToString(),
             'category' => $categoryArr,
             'tags' => 'not implemented',
-            'ingredients' => ''
+            'ingredients' => $this->ingredientsToArray($locale)
         );
     }
     public function getCategory(): ?Category
@@ -137,6 +137,17 @@ class Meal implements TranslatableInterface
         }
 
         return $this;
+    }
+
+    public function ingredientsToArray(string $locale)
+    {
+        $ingredients = $this->getIngredients();
+        $ingredientsReadable = new ArrayCollection();
+        foreach ($ingredients as $ingredient)
+        {
+            $ingredientsReadable->add($ingredient->toArray($locale));
+        }
+        return $ingredientsReadable->toArray();
     }
 
 }

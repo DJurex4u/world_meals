@@ -31,8 +31,6 @@ class CategoryFixture extends Fixture implements DependentFixtureInterface
                 $category->setMeal($meal);
             }
 
-
-
             $manager->persist($category);
             $category->mergeNewTranslations();
         }

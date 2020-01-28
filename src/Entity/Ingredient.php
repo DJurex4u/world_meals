@@ -27,7 +27,6 @@ class Ingredient implements TranslatableInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="ingredients")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $meal;
 
