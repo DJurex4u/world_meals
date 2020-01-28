@@ -7,9 +7,9 @@ use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
  */
-class Category implements TranslatableInterface
+class Tag implements TranslatableInterface
 {
     use TranslatableTrait;
 
@@ -21,12 +21,12 @@ class Category implements TranslatableInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $slug;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Meal", inversedBy="category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="tags")
      */
     private $meal;
 
@@ -47,9 +47,9 @@ class Category implements TranslatableInterface
         return $this;
     }
 
-    public function getMeal()
+    public function getMeal(): ?Meal
     {
-     return $this->meal;
+        return $this->meal;
     }
 
     public function setMeal(?Meal $meal): self
@@ -58,14 +58,4 @@ class Category implements TranslatableInterface
 
         return $this;
     }
-
-
-    public function toArray(string $locale){
-        return array(
-            'id' => $this->id,
-            'title' => $this->translate($locale)->getTitle(),
-            'slug' => $this->slug
-        );
-    }
-
 }

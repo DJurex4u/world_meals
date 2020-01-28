@@ -19,6 +19,7 @@ class Meal implements TranslatableInterface
     {
         $this->status = true;
         $this->ingredients = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     /**
@@ -42,6 +43,11 @@ class Meal implements TranslatableInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Ingredient", mappedBy="meal")
      */
     private $ingredients;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tag", mappedBy="meal")
+     */
+    private $tags;
 
     public function getId(): ?int
     {
@@ -148,6 +154,37 @@ class Meal implements TranslatableInterface
             $ingredientsReadable->add($ingredient->toArray($locale));
         }
         return $ingredientsReadable->toArray();
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->setMeal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            // set the owning side to null (unless already changed)
+            if ($tag->getMeal() === $this) {
+                $tag->setMeal(null);
+            }
+        }
+
+        return $this;
     }
 
 }
