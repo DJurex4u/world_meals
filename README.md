@@ -8,12 +8,10 @@ endpoint je route:   /
 
 primjer routea s queryjem: http://localhost/?lang=en&per_page=3&page=2
 
-VAŽNO: implementacija zahtjeva zadavanje tri parametra kao u primjeru iznad (jezik, rezultate po stranici i broj stranice)
+VAŽNO: implementacija zahtjeva zadavanje tri parametra kao u primjeru iznad (jezik, rezultate po stranici i broj stranice) i nedostaje validacija querija.
 
 Sadrži tri jezika: hr, en i de
 
+Komentar:
 
-Moj komentar:
-Prije svega mislim da mi to što sam krenuo pisati ovaj projekt u Symfonyu 5 nije bila dobra ideja pošto nisam uspio naći nikakve API/REST API Bundlove zbog čega je dosta vremena utrošeno na "izmišljanje" kako da dobijem ono što želim, a nemam nešto iskustva s tim. Iz istoga razloga fali i validacija queryja. Prvi put sam se susreo s prevođenjem appa tako da sam sve skupa zadovoljan svojim napretkom za vrijeme rješavanja ovog zadatka. 
-
-
+Nije školski primjer APIja, no ovo novo iskustvo će mi mnogo pomoći u budućim projektima kao. Kada bih krenuo nanovo pisati, radio bi sa Symfony 4 koristeći FOSRestbundle (koji nije još prilagođen za symfony 5).
