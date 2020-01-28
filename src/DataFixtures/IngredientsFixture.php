@@ -23,16 +23,15 @@ class IngredientsFixture extends Fixture implements DependentFixtureInterface
             $ingredient->translate('en')->setTitle('Ingredient no. '.$j.' in ENG');
             $ingredient->setSlug('ingridient'.$j);  //there are bundles, but not for symfony 5 :(
 
-            //meal has at least 1 (up to 3) random ingredient
+            //meal has at least 1 (up to 4) random ingredient
             if($j < NUMBER_OF_MEALS + 1 ) {
-                $name = '' . $j;
                 $meal = $this->getReference('meal' . $j);
                 $ingredient->setMeal($meal);
             }
-
+            $randNum = mt_rand(0,3);
             for ($k = 0; $k < $randNum; $k++) {
-                $randInt = mt_rand(1, NUMBER_OF_MEALS - 1);
-                $meal = $this->getReference('meal' . $randInt);
+                $randMeal = mt_rand(1, NUMBER_OF_MEALS - 1);
+                $meal = $this->getReference('meal' . $randMeal);
                 $ingredient->setMeal($meal);
             }
 

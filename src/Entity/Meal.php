@@ -100,7 +100,7 @@ class Meal implements TranslatableInterface
             'description' => $this->translate($locale)->getDescription(),
             'status' => $this->getStatusToString(),
             'category' => $categoryArr,
-            'tags' => 'not implemented',
+            'tags' => $this->tagsToArray($locale),
             'ingredients' => $this->ingredientsToArray($locale)
         );
     }
@@ -185,6 +185,17 @@ class Meal implements TranslatableInterface
         }
 
         return $this;
+    }
+
+    public function tagsToArray(string $locale)
+    {
+        $tags = $this->getTags();
+        $tagsReadable = new ArrayCollection();
+        foreach ($tags as $tag)
+        {
+            $tagsReadable->add($tag->toArray($locale));
+        }
+        return $tagsReadable->toArray();
     }
 
 }

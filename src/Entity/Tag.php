@@ -58,4 +58,13 @@ class Tag implements TranslatableInterface
 
         return $this;
     }
+
+    public function toArray(string $locale)
+    {
+        return array(
+            'id'=> $this->id,
+            'title' => $this->translate($locale)->getTitle(),
+            'slug' => $this->slug
+        );
+    }
 }

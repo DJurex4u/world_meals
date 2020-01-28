@@ -23,7 +23,7 @@ class CategoryFixture extends Fixture implements DependentFixtureInterface
             $category->translate('en')->setTitle('Category no. '.$j.' in ENG');
             $category->setSlug('category'.$j);  //there are bundles, but not for symfony 5 :(
 
-            // every meal has 0 or 1 random category
+            // meal - category
             $randInt = mt_rand(1, NUMBER_OF_MEALS - 1);
             $meal = $this->getReference('meal'.$randInt);
             if (!$meal->getCategory()){
