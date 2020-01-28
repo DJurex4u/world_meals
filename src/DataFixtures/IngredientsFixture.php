@@ -35,10 +35,6 @@ class IngredientsFixture extends Fixture implements DependentFixtureInterface
                 $ingredient->setMeal($meal);
             }
 
-//            $randInt = mt_rand(1, NUMBER_OF_MEALS - 1);
-//            $meal = $this->getReference('meal'.$randInt);
-//            $ingredient->setMeal($meal);
-
             $manager->persist($ingredient);
             $ingredient->mergeNewTranslations();
         }
@@ -46,12 +42,9 @@ class IngredientsFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getDependencies()
     {
-        return Array(
+        return array(
             MealFixture::class
         );
     }
