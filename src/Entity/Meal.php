@@ -154,6 +154,7 @@ class Meal implements TranslatableInterface
             $ingredientsReadable->add($ingredient->toArray($locale));
         }
         return $ingredientsReadable->toArray();
+
     }
 
     /**
