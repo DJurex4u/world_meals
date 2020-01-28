@@ -4,7 +4,7 @@
 
 Aplikacija:
 
-endpoint je ruta:   /
+endpoint je route:   /
 
 primjer routea s queryjem: http://localhost/?lang=en&per_page=3&page=2
 
